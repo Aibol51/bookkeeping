@@ -4,125 +4,143 @@
       <img class="logo" src="../assets/img/bookkeeping.png" alt="" />
     </van-cell-group>
   </van-row>
-  <van-tabs v-model:active="active" animated>
-    <van-tab title="登录">
-      <van-form @submit="onSubmit">
+  <van-form @submit.stop="onSubmit">
+    <van-tabs v-model:active="active">
+      <van-tab title="标签 1">
         <van-cell-group inset>
           <van-field
-            v-model="loginForm.loginEmail"
-            name="邮箱"
-            label="邮箱"
-            placeholder="请在此输入登录邮箱"
-            :rules="formRules.email"
+            v-model="formData.username"
+            name="用户名"
+            label="用户名"
+            placeholder="用户名"
+            :rules="loginRules.username"
           />
-        </van-cell-group>
-        <van-cell-group inset>
           <van-field
-            v-model="loginForm.loginPassword"
+            v-model="formData.password"
             type="password"
             name="密码"
             label="密码"
-            placeholder="请在此输入登录密码"
-            :rules="formRules.password"
+            placeholder="密码"
+            :rules="loginRules.password"
           />
         </van-cell-group>
-        <div style="margin: 16px">
-          <van-button round block type="primary" native-type="submit">
-            登录
-          </van-button>
-        </div>
-      </van-form>
-    </van-tab>
-    <van-tab title="注册">
-      <van-form @submit="onSubmit">
+      </van-tab>
+      <van-tab title="标签 2">
         <van-cell-group inset>
           <van-field
-            v-model="registerForm.registerEmail"
-            name="邮箱"
-            label="注册邮箱"
-            placeholder="请在此输入注册邮箱"
-            :rules="formRules.email"
+            v-model="formData.username"
+            name="用户名"
+            label="用户名"
+            placeholder="用户名"
+            :rules="registerRules.username"
           />
-        </van-cell-group>
-        <van-cell-group inset>
           <van-field
-            v-model="registerForm.registerPassword"
+            v-model="formData.password"
             type="password"
             name="密码"
-            label="新密码"
-            placeholder="请在此输入新密码"
-            :rules="formRules.password"
+            label="密码"
+            placeholder="密码"
+            :rules="registerRules.password"
           />
-        </van-cell-group>
-        <van-cell-group inset>
           <van-field
-            v-model="registerForm.retryPassword"
+            v-model="formData.confirmPassword"
             type="password"
             name="密码"
             label="再次输入密码"
-            placeholder="再次输入新密码"
-            :rules="formRules.confirmPassword"
+            placeholder="再次输入密码"
+            :rules="registerRules.confirmPassword"
           />
         </van-cell-group>
-        <div style="margin: 16px">
-          <van-button round block type="primary" native-type="submit">
-            注册
-          </van-button>
-        </div>
-      </van-form>
-    </van-tab>
-  </van-tabs>
+      </van-tab>
+    </van-tabs>
+
+    <div style="margin: 16px">
+      <van-button round block type="primary" native-type="submit">
+        提交
+      </van-button>
+    </div>
+  </van-form>
 </template>
 <script setup>
 import { ref, reactive } from "vue";
 import { closeToast, showLoadingToast } from "vant";
+import { supabase } from "@/supabase";
 
-const loginForm = reactive({
-  loginEmail: "",
-  loginPassword: "",
-});
-const registerForm = reactive({
-  registerEmail: "",
-  registerPassword: "",
-  retryPassword: "",
+console.log(supabase);
+
+const active = ref(0);
+
+const formData = reactive({
+  username: "",
+  password: "",
+  confirmPassword: "",
 });
 
-const formRules = ref({
-  email: [
-    { required: true, message: "请输入邮箱", trigger: "onBlur" },
+const loginRules = reactive({
+  username: [
     {
-      pattern: /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/,
-      message: "邮箱格式不正确",
-      trigger: "onBlur",
+      required: true,
+      message: "请填写用户名",
     },
   ],
   password: [
-    { required: true, message: "请输入密码", trigger: "onBlur" },
     {
-      pattern: /^.{6,15}$/,
-      message: "长度在 6 到 15 个字符",
-      trigger: "onBlur",
+      required: true,
+      message: "请填写密码",
     },
   ],
   confirmPassword: [
-    { required: true, message: "请再次输入新密码", trigger: "onBlur" },
     {
-      validator: validatePassword,
-      message: "两次输入的密码不一致",
-      trigger: "onBlur",
+      required: true,
+      message: "请填写密码",
     },
   ],
 });
-function validatePassword(aaa, value, callback) {
-  console.log(aaa, value, callback);
-  console.log(validatePassword);
-  if (value !== registerForm.registerPassword) {
-    callback(new Error('两次输入的密码不一致'));
-    console.log("123");
-  } 
-}
 
-    
+const passwordValidator = (value, callback) => {
+  if (value.length < 6) {
+    return "密码长度不能小于6位";
+  }
+};
+
+const confirmPasswordValidator = (value, callback) => {
+  console.log(value);
+  if (value !== formData.password) {
+    return "两次输入密码不一致";
+  }
+};
+
+const registerRules = reactive({
+  username: [
+    {
+      required: true,
+      message: "请填写用户名",
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: "请填写密码",
+      validator: passwordValidator,
+    },
+  ],
+  confirmPassword: [
+    {
+      required: true,
+      message: "请填写密码",
+      validator: confirmPasswordValidator,
+    },
+  ],
+});
+
+const onSubmit = () => {
+  if (active.value == 0) {
+  }
+  showLoadingToast("登录中...");
+  setTimeout(() => {
+    closeToast();
+  }, 2000);
+};
 </script>
 <style lang="scss" scoped>
 .van-row {
@@ -150,7 +168,7 @@ function validatePassword(aaa, value, callback) {
     margin: 0 15px 0 15px;
   }
   :deep(.van-tab__panel) {
-    width: 90%;
+    // width: 90%;
     text-align: -webkit-center;
   }
   :deep(.van-tabs__content--animated) {

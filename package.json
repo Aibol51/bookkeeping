@@ -15,8 +15,7 @@
     "sass": "^1.57.1",
     "vant": "^4.0.6",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6",
-    "vuefire": "^3.0.0"
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
