@@ -51,7 +51,7 @@ export const useUserStore = defineStore({
                     showSuccessToast("登录成功");
                     const { session } = await data;
                     this.setToken(session.access_token);
-                    pushToHome();
+                    this.pushToHome();
                 }
             } finally {
                 loadingToast.close();
@@ -74,7 +74,7 @@ export const useUserStore = defineStore({
                     showSuccessToast("注册成功");
                     const { access_token } = await data;
                     this.setToken(access_token);
-                    pushToHome();
+                    this.pushToHome();
                 }
             } finally {
                 loadingToast.close();
