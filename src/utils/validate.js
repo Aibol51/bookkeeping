@@ -1,3 +1,5 @@
+import { useUserStore } from "@/stores/userStore";
+
 export const emailValidator = (value, callback) => {
     const regex =
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -12,9 +14,10 @@ export const passwordValidator = (value, callback) => {
     }
 };
 
-export const confirmPasswordValidator = (value, callback) => {
-    console.log(value);
-    if (value !== formData.password) {
+export const confirmPasswordValidator = () => {
+    const userStore = useUserStore();
+    const userInfo = userStore.getUserInfo;
+    if (userInfo.confirmPassword !== userInfo.password) {
         return "两次输入密码不一致";
     }
 };

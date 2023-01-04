@@ -67,7 +67,7 @@
     </van-form>
 </template>
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, watch } from "vue";
 import {
     emailValidator,
     passwordValidator,
@@ -84,6 +84,9 @@ const formData = reactive({
     email: "",
     password: "",
     confirmPassword: "",
+});
+watch(formData, (val) => {
+    userStore.setUserInfo(val);
 });
 
 const loginRules = reactive({
