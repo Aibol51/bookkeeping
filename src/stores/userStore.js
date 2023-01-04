@@ -6,12 +6,14 @@ import {
     showFailToast,
     allowMultipleToast,
 } from "vant";
+import { useStorage } from "@vueuse/core";
+
 allowMultipleToast();
 
 export const useUserStore = defineStore({
     id: "userStore",
     state: () => ({
-        token: "",
+        token: useStorage("token", ""),
         userInfo: {
             email: "",
             password: "",
@@ -83,12 +85,19 @@ export const useUserStore = defineStore({
                         case 404:
                             showFailToast("请求错误");
                             break;
+                        case 429:
+                            showFailToast("请求次数过多");
                         default:
                             showFailToast(error.message);
                             break;
                     }
                 } else {
                     showSuccessToast("注册成功");
+                    const { user } = await data;
+                    this.setToken(user.id);
+                    this.router.push({
+                        name: "Home",
+                    });
                 }
             } finally {
                 loadingToast.close();
