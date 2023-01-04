@@ -1,13 +1,8 @@
 import { defineStore } from "pinia";
 import { supabase } from "@/supabase";
-import {
-    showLoadingToast,
-    showSuccessToast,
-    showFailToast,
-    allowMultipleToast,
-} from "vant";
 import { useStorage } from "@vueuse/core";
-
+import { errorStatus } from "../utils/tools";
+import { showLoadingToast, showSuccessToast, allowMultipleToast } from "vant";
 allowMultipleToast();
 
 export const useUserStore = defineStore({
@@ -35,7 +30,11 @@ export const useUserStore = defineStore({
         setUserInfo(userInfo) {
             this.userInfo = userInfo;
         },
-
+        pushToHome() {
+            this.router.push({
+                name: "Home",
+            });
+        },
         async login() {
             const loadingToast = showLoadingToast({
                 message: "登录中...",
@@ -47,27 +46,12 @@ export const useUserStore = defineStore({
                     password: this.userInfo.password,
                 });
                 if (error) {
-                    switch (error.status) {
-                        case 400:
-                            showFailToast("请求参数错误，用户不存在");
-                            break;
-                        case 401:
-                            showFailToast("用户名或密码错误");
-                            break;
-                        case 404:
-                            showFailToast("请求错误");
-                            break;
-                        default:
-                            showFailToast(error.message);
-                            break;
-                    }
+                    errorStatus(error);
                 } else {
                     showSuccessToast("登录成功");
                     const { session } = await data;
                     this.setToken(session.access_token);
-                    this.router.push({
-                        name: "Home",
-                    });
+                    pushToHome();
                 }
             } finally {
                 loadingToast.close();
@@ -85,26 +69,12 @@ export const useUserStore = defineStore({
                     password: this.userInfo.password,
                 });
                 if (error) {
-                    switch (error.status) {
-                        case 400:
-                            showFailToast("请求参数错误，用户已存在");
-                            break;
-                        case 404:
-                            showFailToast("请求错误");
-                            break;
-                        case 429:
-                            showFailToast("请求次数过多");
-                        default:
-                            showFailToast(error.message);
-                            break;
-                    }
+                    errorStatus(error);
                 } else {
                     showSuccessToast("注册成功");
                     const { access_token } = await data;
                     this.setToken(access_token);
-                    this.router.push({
-                        name: "Home",
-                    });
+                    pushToHome();
                 }
             } finally {
                 loadingToast.close();
