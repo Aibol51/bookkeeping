@@ -5,15 +5,16 @@
     </van-cell-group>
   </van-row>
   <van-form @submit.stop="onSubmit">
-    <van-tabs v-model:active="active">
-      <van-tab title="标签 1">
+    <van-tabs v-model:active="active" @change="onClear">
+      <van-tab title="登录">
         <van-cell-group inset>
           <van-field
-            v-model="formData.username"
-            name="用户名"
-            label="用户名"
-            placeholder="用户名"
-            :rules="loginRules.username"
+            v-model="formData.email"
+            name="邮箱"
+            label="邮箱"
+            placeholder="邮箱"
+            :rules="loginRules.email"
+            clearable
           />
           <van-field
             v-model="formData.password"
@@ -22,17 +23,19 @@
             label="密码"
             placeholder="密码"
             :rules="loginRules.password"
+            clearable
           />
         </van-cell-group>
       </van-tab>
-      <van-tab title="标签 2">
+      <van-tab title="注册">
         <van-cell-group inset>
           <van-field
-            v-model="formData.username"
-            name="用户名"
-            label="用户名"
-            placeholder="用户名"
-            :rules="registerRules.username"
+            v-model="formData.email"
+            name="邮箱"
+            label="邮箱"
+            placeholder="邮箱"
+            :rules="registerRules.email"
+            clearable
           />
           <van-field
             v-model="formData.password"
@@ -41,6 +44,7 @@
             label="密码"
             placeholder="密码"
             :rules="registerRules.password"
+            clearable
           />
           <van-field
             v-model="formData.confirmPassword"
@@ -49,13 +53,20 @@
             label="再次输入密码"
             placeholder="再次输入密码"
             :rules="registerRules.confirmPassword"
+            clearable
           />
         </van-cell-group>
       </van-tab>
     </van-tabs>
 
     <div style="margin: 16px">
-      <van-button round block type="primary" native-type="submit">
+      <van-button
+        round
+        block
+        type="primary"
+        native-type="submit"
+        @click="register"
+      >
         提交
       </van-button>
     </div>
@@ -63,7 +74,12 @@
 </template>
 <script setup>
 import { ref, reactive } from "vue";
-import { closeToast, showLoadingToast } from "vant";
+import {
+  closeToast,
+  showLoadingToast,
+  showSuccessToast,
+  showFailToast,
+} from "vant";
 import { supabase } from "@/supabase";
 
 console.log(supabase);
@@ -71,31 +87,18 @@ console.log(supabase);
 const active = ref(0);
 
 const formData = reactive({
-  username: "",
+  email: "",
   password: "",
   confirmPassword: "",
 });
 
-const loginRules = reactive({
-  username: [
-    {
-      required: true,
-      message: "请填写用户名",
-    },
-  ],
-  password: [
-    {
-      required: true,
-      message: "请填写密码",
-    },
-  ],
-  confirmPassword: [
-    {
-      required: true,
-      message: "请填写密码",
-    },
-  ],
-});
+const emailValidator = (value, callback) => {
+  const regex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  if (!regex.test(value)) {
+    return "请填写正确的邮箱地址";
+  }
+};
 
 const passwordValidator = (value, callback) => {
   if (value.length < 6) {
@@ -110,11 +113,29 @@ const confirmPasswordValidator = (value, callback) => {
   }
 };
 
-const registerRules = reactive({
-  username: [
+const loginRules = reactive({
+  email: [
     {
       required: true,
-      message: "请填写用户名",
+      message: "请填写邮箱",
+      validator: emailValidator,
+    },
+  ],
+  password: [
+    {
+      required: true,
+      message: "请填写密码",
+      validator: passwordValidator,
+    },
+  ],
+});
+
+const registerRules = reactive({
+  email: [
+    {
+      required: true,
+      message: "请填写邮箱",
+      validator: emailValidator,
     },
   ],
   password: [
@@ -141,6 +162,30 @@ const onSubmit = () => {
     closeToast();
   }, 2000);
 };
+
+function onClear(active) {
+  formData.email = "";
+  formData.password = "";
+  formData.confirmPassword = "";
+}
+async function signIn() {
+  const { data, error } = await supabase.auth.signIn({
+    email: formData.email,
+    password: formData.password,
+  });
+  console.log(data);
+  console.log(error);
+  if (error) {
+    console.log(error);
+  }
+}
+
+async function register() {
+  const { data: res } = await supabase.auth.signUp({
+    email: formData.email,
+    password: formData.password,
+  });
+}
 </script>
 <style lang="scss" scoped>
 .van-row {
