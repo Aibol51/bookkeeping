@@ -61,6 +61,13 @@ export const useUserStore = defineStore({
                             showFailToast(error.message);
                             break;
                     }
+                } else {
+                    showSuccessToast("登录成功");
+                    const { session } = await data;
+                    this.setToken(session.access_token);
+                    this.router.push({
+                        name: "Home",
+                    });
                 }
             } finally {
                 loadingToast.close();
@@ -93,8 +100,8 @@ export const useUserStore = defineStore({
                     }
                 } else {
                     showSuccessToast("注册成功");
-                    const { user } = await data;
-                    this.setToken(user.id);
+                    const { access_token } = await data;
+                    this.setToken(access_token);
                     this.router.push({
                         name: "Home",
                     });
