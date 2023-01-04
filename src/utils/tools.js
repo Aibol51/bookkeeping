@@ -1,7 +1,7 @@
 import { showFailToast } from "vant";
 
 export const errorStatus = (code) => {
-    switch (code) {
+    switch (code.status) {
         case 400:
             showFailToast("请求参数错误");
             break;
@@ -39,7 +39,7 @@ export const errorStatus = (code) => {
             showFailToast("http版本不支持该请求");
             break;
         default:
-            showFailToast(error.message);
+            showFailToast(code.message);
             break;
     }
 };

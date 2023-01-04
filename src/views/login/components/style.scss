@@ -1,0 +1,37 @@
+.van-row {
+    padding-top: 15%;
+    #loginLogo {
+        width: 109px;
+        height: 109px;
+        background-image: linear-gradient(to top, #3e49ae 0%, #a6c1ee 100%);
+        filter: drop-shadow(4px 5px 5px rgba(0, 0, 0, 0.25));
+        border-radius: 30%;
+        .logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65px;
+            height: 65px;
+        }
+    }
+}
+.van-tabs {
+    padding-top: 10%;
+    :deep(.van-tabs__nav) {
+        background: none;
+        margin: 0 15px 0 15px;
+    }
+    :deep(.van-tab__panel) {
+        // width: 90%;
+        text-align: -webkit-center;
+    }
+    :deep(.van-tabs__content--animated) {
+        text-align: -webkit-center;
+    }
+}
+.van-form {
+    .van-cell-group--inset {
+        margin-bottom: 5%;
+    }
+}

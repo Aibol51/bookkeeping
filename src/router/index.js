@@ -6,10 +6,8 @@ Object.keys(modules).map((key) => {
     const name = key.replace("../views/", "/").replace(".vue", "");
     routes.push({
         path: name,
-        name: name.replaceAll("/", ""),
-        // dynamic import component
+        name: name.replace("/", "").replace("/", ":"),
         component: modules[key].default,
-        // component: () => import(key),
     });
 });
 
@@ -18,7 +16,7 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            redirect: "/",
+            redirect: "/home/index",
         },
         ...routes,
         {
@@ -30,8 +28,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem("token");
-    if (to.name !== "Login" && !token) next({ name: "Login" });
-    else if (to.name === "Login" && token) next({ name: "Home" });
+    if (to.path !== "/login/index" && !token) next({ path: "/login/index" });
+    else if (to.path === "/login/index" && token) next({ path: "/home/index" });
     else next();
 });
 
