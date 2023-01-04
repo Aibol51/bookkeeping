@@ -41,7 +41,7 @@
   <FooterTap></FooterTap>
 </template>
 <script setup>
-import FooterTap from './FooterTap.vue'
+import FooterTap from '../components/FooterTap.vue'
 
 </script>
 <style lang="scss" scoped>
