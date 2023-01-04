@@ -1,23 +1,37 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import Login from '../components/Login.vue'
-import Home from '../components/Home.vue'
+import { createRouter, createWebHashHistory } from "vue-router";
 
-const routes = [
-  {
-    path: '/login',
-    name: 'login',
-    component: Login
-  },
-  {
-    path: '/', 
-    name: 'home',
-    component: Home
-  },
-]
+const modules = import.meta.globEager("../views/**/*.vue");
+const routes = [];
+Object.keys(modules).map((key) => {
+    const name = key.replace("../views/", "/").replace(".vue", "");
+    routes.push({
+        path: name,
+        name: name.replaceAll("/", ""),
+        // dynamic import component
+        component: modules[key].default,
+        // component: () => import(key),
+    });
+});
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  routes
-})
+    history: createWebHashHistory(),
+    routes: [
+        {
+            path: "/",
+            redirect: "/",
+        },
+        ...routes,
+        {
+            path: "/:pathMatch(.*)*",
+            redirect: "/404",
+        },
+    ],
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem("token");
+    if (to.name !== "Login" && !token) next({ name: "Login" });
+    else next();
+});
+
+export default router;
