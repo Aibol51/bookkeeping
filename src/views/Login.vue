@@ -4,7 +4,7 @@
             <img class="logo" src="../assets/img/bookkeeping.png" alt="" />
         </van-cell-group>
     </van-row>
-    <van-form @submit.stop="onSubmit" ref="formRef">
+    <van-form @submit="onSubmit" ref="formRef">
         <van-tabs v-model:active="active" @change="onClear">
             <van-tab title="登录">
                 <van-cell-group inset>
@@ -60,13 +60,7 @@
         </van-tabs>
 
         <div style="margin: 16px">
-            <van-button
-                round
-                block
-                type="primary"
-                native-type="submit"
-                @click="register"
-            >
+            <van-button round block type="primary" native-type="submit">
                 提交
             </van-button>
         </div>
@@ -75,17 +69,13 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import {
-    closeToast,
-    showLoadingToast,
-    showSuccessToast,
-    showFailToast,
-} from "vant";
-import { supabase } from "@/supabase";
-import {
     emailValidator,
     passwordValidator,
     confirmPasswordValidator,
 } from "@/utils/validate.js";
+
+import { useUserStore } from "@/stores/userStore";
+const userStore = useUserStore();
 
 const active = ref(0);
 const formRef = ref(null);
@@ -137,36 +127,17 @@ const registerRules = reactive({
     ],
 });
 
-const onSubmit = () => {
-    if (active.value == 0) {
-    }
-    showLoadingToast("登录中...");
-    setTimeout(() => {
-        closeToast();
-    }, 2000);
-};
-
 function onClear() {
     formRef.value.$el.reset();
 }
-async function signIn() {
-    const { data, error } = await supabase.auth.signIn({
-        email: formData.email,
-        password: formData.password,
-    });
-    console.log(data);
-    console.log(error);
-    if (error) {
-        console.log(error);
-    }
-}
 
-async function register() {
-    const { data: res } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-    });
-}
+const onSubmit = (formData) => {
+    if (active.value === 0) {
+        userStore.login(formData);
+    } else {
+        userStore.register(formData);
+    }
+};
 </script>
 <style lang="scss" scoped>
 .van-row {
