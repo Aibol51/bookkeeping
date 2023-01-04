@@ -131,6 +131,7 @@ const registerRules = reactive({
 });
 
 function onClear() {
+    formRef.value.resetValidation();
     formRef.value.$el.reset();
 }
 
