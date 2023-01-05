@@ -1,7 +1,7 @@
 <template>
   <van-tabbar v-model="active">
     <van-tabbar-item icon="wap-home-o">首页</van-tabbar-item>
-    <van-button icon="plus" type="primary" />
+    <van-button icon="plus" type="primary" @click="showPopup" />
     <van-tabbar-item icon="friends-o">个人</van-tabbar-item>
   </van-tabbar>
 </template>

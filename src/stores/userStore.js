@@ -32,7 +32,7 @@ export const useUserStore = defineStore({
         },
         pushToHome() {
             this.router.push({
-                name: "Home",
+                name: "home:index",
             });
         },
         async login() {

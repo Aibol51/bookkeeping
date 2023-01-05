@@ -38,9 +38,11 @@
         </van-cell-group>
     </div>
     <FooterTap></FooterTap>
+    <AddMenu></AddMenu>
 </template>
 <script setup>
 import FooterTap from "@/components/FooterTap.vue";
+import AddMenu from "@/components/AddMenu.vue";
 </script>
 <style lang="scss" scoped>
 #my_note {

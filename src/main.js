@@ -15,6 +15,7 @@ import {
     Form,
     Tab,
     Tabs,
+    Popup,
 } from "vant";
 import "vant/lib/index.css";
 
@@ -38,4 +39,5 @@ app.use(Field);
 app.use(Form);
 app.use(Tab);
 app.use(Tabs);
+app.use(Popup);
 app.mount("#app");
