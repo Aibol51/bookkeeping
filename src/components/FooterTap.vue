@@ -18,8 +18,9 @@ const showPopup = () => {
 const active = ref(0);
 </script>
 
-<style lang="sass" scoped>
-.van-button--normal
-  border-radius: 35%
-  align-self: center
+<style lang="scss" scoped>
+.van-button--normal {
+    border-radius: 35%;
+    align-self: center;
+}
 </style>
