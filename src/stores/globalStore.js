@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
 
 export const useGlobalStore = defineStore({
-  id: "globalStore",
+    id: "globalStore",
 
-  state: () => ({
-    supabase: null,
-  }),
+    state: () => ({
+        showAddMenu: false,
+    }),
 
-  actions: {
-    
-  }
+    actions: {
+        setShowAddMenu(show) {
+            this.showAddMenu = show;
+        },
+    },
 });
