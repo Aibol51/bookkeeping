@@ -18,6 +18,7 @@ import {
   Popup,
   Grid,
   GridItem,
+  NumberKeyboard,
 } from "vant";
 import "vant/lib/index.css";
 
@@ -98,5 +99,6 @@ app.use(Tabs);
 app.use(Popup);
 app.use(Grid);
 app.use(GridItem);
+app.use(NumberKeyboard);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");

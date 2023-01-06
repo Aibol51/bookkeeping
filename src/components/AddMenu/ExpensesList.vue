@@ -6,10 +6,10 @@
         <p class="listTitle">
           {{ item.text }}
         </p>
-        <keyBoard></keyBoard>
+        
       </van-grid-item>
     </van-grid>
-    
+    <keyBoard></keyBoard>
   </div>
 </template>
 
@@ -63,9 +63,7 @@ const expensesList = [
   line-height: 100px;
   vertical-align: middle;
   padding: 10px;
-  :visited {
-    background: #ff0000;
-  }
+  color: #FFFFFF;
 }
 .listTitle{
   font-size: 12px;
