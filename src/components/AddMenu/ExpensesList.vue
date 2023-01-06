@@ -1,17 +1,27 @@
 <template>
   <div>
     <van-grid :gutter="10" :border="false">
-      <van-grid-item v-for="(item, index) in expensesList" :key="index">
+      <van-grid-item v-for="(item, index) in expensesList" :key="index" @click="showPopup">
         <font-awesome-icon class="iconBack" :icon="item.icon" />
         <p class="listTitle">
           {{ item.text }}
         </p>
+        <keyBoard></keyBoard>
       </van-grid-item>
     </van-grid>
+    
   </div>
 </template>
 
 <script setup>
+import { useGlobalStore } from "@/stores/globalStore.js";
+import keyBoard from "../AddMenu/keyBoard.vue";
+
+const globalStore = useGlobalStore();
+
+const showPopup = () => {
+    globalStore.setShowKeyBoard(true);
+};
 const expensesList = [
   { icon: "fa-solid fa-burger", text: "餐饮" },
   { icon: "fa-solid fa-cart-shopping", text: "购物" },
