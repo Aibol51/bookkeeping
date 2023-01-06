@@ -42,7 +42,7 @@
 </template>
 <script setup>
 import FooterTap from "@/components/FooterTap.vue";
-import AddMenu from "@/components/AddMenu.vue";
+import AddMenu from "@/components/AddMenu/AddMenu.vue";
 </script>
 <style lang="scss" scoped>
 #my_note {
