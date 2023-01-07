@@ -19,6 +19,7 @@ import {
   Grid,
   GridItem,
   NumberKeyboard,
+  DatePicker,
 } from "vant";
 import "vant/lib/index.css";
 
@@ -100,5 +101,6 @@ app.use(Popup);
 app.use(Grid);
 app.use(GridItem);
 app.use(NumberKeyboard);
+app.use(DatePicker);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");
